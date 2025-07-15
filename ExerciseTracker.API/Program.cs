@@ -1,7 +1,9 @@
+using ExerciseTracker.API.Authentication;
 using ExerciseTracker.API.Services;
 using ExerciseTracker.Core.Repositories;
 using ExerciseTracker.EF;
 using ExerciseTracker.EF.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -25,6 +27,9 @@ internal class Program
 
         builder.Services.AddScoped<IExerciseService, ExerciseService>();
         builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+        builder.Services.AddAuthentication()
+            .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
 
         var app = builder.Build();
 

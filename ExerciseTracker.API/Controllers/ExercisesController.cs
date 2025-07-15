@@ -1,6 +1,8 @@
 ﻿using ExerciseTracker.API.Services;
 using ExerciseTracker.Core.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ExerciseTracker.API.Controllers;
 
@@ -41,8 +43,11 @@ public class ExercisesController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ExerciseResponseDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [Authorize]
     public ActionResult<ExerciseResponseDTO> GetById(int id)
     {
+        var username = User.Identity.Name;
+        var userId = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var exercise = _exerciseService.GetExerciseById(id);
         if (exercise == null)
         {
