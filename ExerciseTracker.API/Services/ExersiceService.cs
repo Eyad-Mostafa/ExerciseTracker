@@ -13,7 +13,7 @@ public class ExerciseService : IExerciseService
         _exerciseRepository = exerciseRepository;
     }
 
-    public Exercise AddExercise(ExerciseDTO exerciseDTO)
+    public Exercise AddExercise(CreateExerciseDTO exerciseDTO)
     {
         var exercise = new Exercise
         {
@@ -27,7 +27,7 @@ public class ExerciseService : IExerciseService
         return _exerciseRepository.Add(exercise);
     }
 
-    public Exercise? UpdateExercise(int id, ExerciseDTO exerciseDTO)
+    public Exercise? UpdateExercise(int id, CreateExerciseDTO exerciseDTO)
     {
         var exercise = new Exercise
         {
