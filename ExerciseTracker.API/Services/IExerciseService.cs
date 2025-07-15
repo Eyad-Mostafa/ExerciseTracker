@@ -7,7 +7,7 @@ public interface IExerciseService
 {
     IEnumerable<Exercise> GetAllExercises();
     Exercise? GetExerciseById(int id);
-    Exercise AddExercise(ExerciseDTO exercise);
-    Exercise? UpdateExercise(int id, ExerciseDTO exercise);
+    Exercise AddExercise(CreateExerciseDTO exercise);
+    Exercise? UpdateExercise(int id, CreateExerciseDTO exercise);
     Exercise? DeleteExercise(int id);
 }

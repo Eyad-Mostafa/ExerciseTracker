@@ -3,6 +3,7 @@ using ExerciseTracker.Core.Repositories;
 using ExerciseTracker.EF;
 using ExerciseTracker.EF.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 internal class Program
 {
@@ -12,7 +13,13 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+        });
+
 
         builder.Services.AddDbContext<AppDbContext>(cfg => cfg.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
