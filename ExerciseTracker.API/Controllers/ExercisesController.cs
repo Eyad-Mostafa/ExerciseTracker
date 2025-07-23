@@ -1,5 +1,7 @@
-﻿using ExerciseTracker.API.Services;
+﻿using ExerciseTracker.API.Authorization;
+using ExerciseTracker.API.Services;
 using ExerciseTracker.Core.DTOs;
+using ExerciseTracker.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -8,6 +10,7 @@ namespace ExerciseTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ExercisesController : ControllerBase
 {
     private readonly IExerciseService _exerciseService;
@@ -22,6 +25,7 @@ public class ExercisesController : ControllerBase
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(List<ExerciseResponseDTO>), StatusCodes.Status200OK)]
+    [CheckPermission(Permission.ReadExcercise)]
     public ActionResult<List<ExerciseResponseDTO>> GetAll()
     {
         var exercises = _exerciseService.GetAllExercises();
@@ -43,7 +47,7 @@ public class ExercisesController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ExerciseResponseDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    [Authorize]
+    [CheckPermission(Permission.ReadExcercise)]
     public ActionResult<ExerciseResponseDTO> GetById(int id)
     {
         var username = User.Identity.Name;

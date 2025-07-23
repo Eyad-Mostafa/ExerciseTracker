@@ -1,5 +1,6 @@
 using ExerciseTracker.API;
 using ExerciseTracker.API.Authentication;
+using ExerciseTracker.API.Authorization;
 using ExerciseTracker.API.Services;
 using ExerciseTracker.Core.Repositories;
 using ExerciseTracker.EF;
@@ -19,6 +20,10 @@ internal class Program
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddControllers(options => 
+        {
+            options.Filters.Add<PermissionBasedAuthorizationFilter>();
+        });
         builder.Services.AddSwaggerGen(c =>
         {
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

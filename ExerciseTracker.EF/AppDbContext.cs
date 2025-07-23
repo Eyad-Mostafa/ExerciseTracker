@@ -6,7 +6,6 @@ namespace ExerciseTracker.EF;
 public class AppDbContext : DbContext
 {
     public DbSet<Exercise> Exercises { get; set; } = null!;
-    public DbSet<AuthenticationRequest> AuthenticationRequests { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -16,6 +15,7 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Entity<Exercise>().ToTable("Exercises");
         modelBuilder.Entity<Exercise>().Property(e => e.Comments).HasMaxLength(400);
-        modelBuilder.Entity<AuthenticationRequest>().ToTable("Users");
+        modelBuilder.Entity<User>().ToTable("Users");
+        modelBuilder.Entity<UserPermission>().ToTable("UserPermissions").HasKey(x => new { x.UserId, x.PermissionId });
     }
 }

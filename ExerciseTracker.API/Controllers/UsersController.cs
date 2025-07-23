@@ -1,4 +1,5 @@
 ﻿using ExerciseTracker.Core.Models;
+using ExerciseTracker.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,7 +9,7 @@ using System.Text;
 namespace ExerciseTracker.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(JwtOptions jwtOptions) : Controller
+public class UsersController(JwtOptions jwtOptions, AppDbContext dbContext) : Controller
 {
     //private readonly IUsersService _usersService;
 
@@ -21,6 +22,12 @@ public class UsersController(JwtOptions jwtOptions) : Controller
     [Route("auth")]
     public ActionResult<string> AuthenticateUser(AuthenticationRequest request)
     {
+        var user = dbContext.Set<User>().FirstOrDefault(x => x.Name == request.UserName &&
+        x.Password == request.Password);
+
+        if (user == null)
+            return Unauthorized();
+
         var tokenHandler = new JwtSecurityTokenHandler();
 
         var tokenDiscriptor = new SecurityTokenDescriptor
@@ -31,7 +38,8 @@ public class UsersController(JwtOptions jwtOptions) : Controller
             SecurityAlgorithms.HmacSha256),
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new(ClaimTypes.NameIdentifier, request.UserName)
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new(ClaimTypes.Name, request.UserName)
             })
         };
 
